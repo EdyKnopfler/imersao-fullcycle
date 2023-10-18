@@ -28,7 +28,7 @@ func NewPixKey(kind string, account *Account, key string) (*PixKey, error) {
 	pixKey := PixKey{
 		Kind: kind,
 		Account: account,
-		AccountId: account.ID,
+		AccountID: account.ID,
 		Key: key,
 		Status: "active",
 	}

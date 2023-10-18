@@ -41,8 +41,10 @@ func NewTransaction(
 	
 	transaction := Transaction{
 		AccountFrom: accountFrom,
+		AccountFromID: accountFrom.ID,
 		Amount: amount,
 		PixKeyTo: pixKeyTo,
+		PixKeyIdTo: pixKeyTo.ID,
 		Status: TransactionPending,
 		Description: description,
 	}
@@ -81,16 +83,16 @@ func (t *Transaction) isValid() error {
 }
 
 func (t *Transaction) Complete() error {
-	return atualizarStatusEValidar(TransactionCompleted)
+	return t.atualizarStatusEValidar(TransactionCompleted)
 }
 
 func (t *Transaction) Cancel(cancelDescription string) error {
 	t.CancelDescription = cancelDescription
-	return atualizarStatusEValidar(TransactionError)
+	return t.atualizarStatusEValidar(TransactionError)
 }
 
 func (t *Transaction) Confirm() error {
-	return atualizarStatusEValidar(TransactionConfirmed)
+	return t.atualizarStatusEValidar(TransactionConfirmed)
 }
 
 func (t *Transaction) atualizarStatusEValidar(novoStatus string) error {

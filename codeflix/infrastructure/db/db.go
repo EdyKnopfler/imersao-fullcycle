@@ -8,9 +8,10 @@ import (
 	"runtime"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
-	_ "gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 )
 
 func init() {
@@ -25,25 +26,28 @@ func init() {
 }
 
 func ConnectDB(env string) *gorm.DB {
+	var config *gorm.Config
 	var dsn string
 	var db *gorm.DB
 	var err error
 
+	if os.Getenv("debug") == "true" {
+		config = &gorm.Config{Logger: logger.Default.LogMode(logger.Info)}
+	} else {
+		config = &gorm.Config{Logger: logger.Default.LogMode(logger.Error)}
+	}
+
 	if env != "test" {
 		dsn = os.Getenv("dsn")
-		db, err = gorm.Open(os.Getenv("dbType"), dsn)
+		db, err = gorm.Open(postgres.Open(dsn), config)
 	} else {
 		dsn = os.Getenv("dsnTest")
-		db, err = gorm.Open(os.Getenv("dbTypeTest", dsn))
+		db, err = gorm.Open(sqlite.Open(dsn), config)
 	}
 
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 		panic(err)
-	}
-
-	if os.Getenv("debug") == "true" {
-		db.LogMode(true)
 	}
 
 	if os.Getenv("AutoMigrateDb") == "true" {
