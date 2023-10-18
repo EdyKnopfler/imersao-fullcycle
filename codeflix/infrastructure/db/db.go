@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/junzhu/gorm"
+	"gorm.io/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	_ "gorm.io/driver/sqlite"

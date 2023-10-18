@@ -8,10 +8,11 @@ import (
 
 type Account struct {
 	Base `valid:"required"`
-	OwnerName string `json:"ownerName" valid:"notnull"`
+	OwnerName string `gorm:"column:owner_name;type:varchar(255);not null" json:"ownerName" valid:"notnull"`
 	Bank *Bank `valid:"-"`
-	Number string `json:"number" valid:"-"`
-	PixKeys []*PixKey `valid:"-"`
+	BankID string `gorm:"column:bank_id;type:uuid;not null" valid:"-"`
+	Number string `gorm:"type:varchar(20)" json:"number" valid:"-"`
+	PixKeys []*PixKey `gorm:"ForeignKey:AccountID" valid:"-"`
 }
 
 func NewAccount(bank *Bank, number string, ownerName string) (*Account, error) {

@@ -44,5 +44,15 @@ O inverso do anterior :)
 
 :D
 
+## gORM
 
+Trabalhar com ORM traz ônus e bônus...
+
+Um ônus do gORM é a exigência das colunas de ID nas chaves estrangeiras:
+
+```go
+type Account struct {
+	BankID string `gorm:"column:bank_id;type:uuid;not null" valid:"-"`
+}
+```
 

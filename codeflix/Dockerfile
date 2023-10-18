@@ -1,6 +1,6 @@
 # Ambiente para desenvolvimento Go com gRPC (Protobuf) e Apache Kafka
 
-FROM golang:1.15
+FROM golang:1.21
 
 WORKDIR /go/src
 ENV PATH="/go/bin:${PATH}"
