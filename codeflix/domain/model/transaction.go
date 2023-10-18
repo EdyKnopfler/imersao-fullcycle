@@ -78,24 +78,21 @@ func (t *Transaction) isValid() error {
 	return err
 }
 
-// TODO Daria para refatorar em um método "privado atualizarStatus"
 func (t *Transaction) Complete() error {
-	t.Status = TransactionCompleted
-	t.UpdatedAt = time.Now()
-	err := t.isValid()
-	return err
+	return atualizarStatusEValidar(TransactionCompleted)
 }
 
 func (t *Transaction) Cancel(cancelDescription string) error {
-	t.Status = TransactionError
 	t.CancelDescription = cancelDescription
-	t.UpdatedAt = time.Now()
-	err := t.isValid()
-	return err
+	return atualizarStatusEValidar(TransactionError)
 }
 
 func (t *Transaction) Confirm() error {
-	t.Status = TransactionConfirmed
+	return atualizarStatusEValidar(TransactionConfirmed)
+}
+
+func (t *Transaction) atualizarStatusEValidar(novoStatus string) error {
+	t.Status = novoStatus
 	t.UpdatedAt = time.Now()
 	err := t.isValid()
 	return err
