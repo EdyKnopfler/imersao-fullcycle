@@ -1,16 +1,17 @@
 package model
 
 import (
-	"time"
 	"errors"
-	uuid "github.com/satori/go.uuid"
+	"time"
+
 	govalidator "github.com/asaskevich/govalidator"
+	uuid "github.com/satori/go.uuid"
 )
 
 const (
-	TransactionPending string = "pending"
+	TransactionPending   string = "pending"
 	TransactionCompleted string = "completed"
-	TransactionError string = "error"
+	TransactionError     string = "error"
 	TransactionConfirmed string = "confirmed"
 )
 
@@ -25,28 +26,28 @@ type Transactions struct {
 }
 
 type Transaction struct {
-	Base `valid:"required"`
-	AccountFrom *Account `valid:"-"`
-	AccountFromID string `gorm:"column:account_from_id;type:uuid;" valid:"notnull"`
-	Amount float64 `gorm:"type:decimal(10,2)" json:"amount" valid:"notnull"`
-	PixKeyTo *PixKey `valid:"-"`
-	PixKeyIdTo string `gorm:"column:pix_key_id_to;type:uuid;" valid:"notnull"`
-	Status string `gorm:"type:varchar(20)" json:"status" valid:"notnull"`
-	Description string `gorm:"type:varchar(255)" json:"description" valid:"notnull"`
-	CancelDescription string `gorm:"type:varchar(255)" json:"cancelDescription" valid:"-"`
+	Base              `valid:"required"`
+	AccountFrom       *Account `valid:"-"`
+	AccountFromID     string   `gorm:"column:account_from_id;type:uuid;" valid:"notnull"`
+	Amount            float64  `gorm:"type:decimal(10,2)" json:"amount" valid:"notnull"`
+	PixKeyTo          *PixKey  `gorm:"foreignKey:PixKeyIdTo;references:ID" valid:"-"`
+	PixKeyIdTo        string   `gorm:"column:pix_key_id_to;type:uuid;" valid:"notnull"`
+	Status            string   `gorm:"type:varchar(20)" json:"status" valid:"notnull"`
+	Description       string   `gorm:"type:varchar(255)" json:"description" valid:"notnull"`
+	CancelDescription string   `gorm:"type:varchar(255)" json:"cancelDescription" valid:"-"`
 }
 
 func NewTransaction(
 	accountFrom *Account, amount float64, pixKeyTo *PixKey, description string) (*Transaction, error) {
-	
+
 	transaction := Transaction{
-		AccountFrom: accountFrom,
+		AccountFrom:   accountFrom,
 		AccountFromID: accountFrom.ID,
-		Amount: amount,
-		PixKeyTo: pixKeyTo,
-		PixKeyIdTo: pixKeyTo.ID,
-		Status: TransactionPending,
-		Description: description,
+		Amount:        amount,
+		PixKeyTo:      pixKeyTo,
+		PixKeyIdTo:    pixKeyTo.ID,
+		Status:        TransactionPending,
+		Description:   description,
 	}
 
 	transaction.ID = uuid.NewV4().String()
@@ -71,7 +72,7 @@ func (t *Transaction) isValid() error {
 		return errors.New("amount must be greather than 0")
 	}
 
-	if t.Status != TransactionPending && t.Status != TransactionCompleted && t.Status != TransactionError  && t.Status != TransactionConfirmed {
+	if t.Status != TransactionPending && t.Status != TransactionCompleted && t.Status != TransactionError && t.Status != TransactionConfirmed {
 		return errors.New("invalid status")
 	}
 
