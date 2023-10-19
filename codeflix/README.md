@@ -67,6 +67,16 @@ docker compose up [-d] app db
 docker compose exec app go run cmd/main.go
 ```
 
+Testando com o Evans (já instalado na imagem):
+
+```bash
+docker compose exec -it app evans -r repl
+
+> package derso.com.imersao.fullcycle.codeflix
+> service PixService
+> call RegisterPixKey
+```
+
 ## gORM
 
 Trabalhar com ORM traz ônus e bônus...
