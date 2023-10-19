@@ -10,6 +10,10 @@ Coração da aplicação, sem pensar em banco de dados ou infraestrutura de qual
 
 O domínio declara interfaces mas não implementa. Ex.: repositórios.
 
+## Application
+
+Camada de infraestrutura: serviço de gRPC, etc.
+
 ## gRPC
 
 Streaming bidirecional usando HTTP/2.
