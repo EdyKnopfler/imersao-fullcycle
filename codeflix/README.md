@@ -60,6 +60,13 @@ protoc \
 * `protoc` instalado na imagem pelo `Dockerfile`
 * saída em `application/grpc/pb` conforme descrito nos arquivos
 
+Subindo o servidor:
+
+```bash
+docker compose up [-d] app db
+docker compose exec app go run cmd/main.go
+```
+
 ## gORM
 
 Trabalhar com ORM traz ônus e bônus...
