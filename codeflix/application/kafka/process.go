@@ -78,6 +78,9 @@ func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
 	)
 
 	if err != nil {
+		// TODO o banco de origem tem que ser notificado em caso de erro, né não? rs
+		// Isso exigiria alguns refactorings para tornar isto um pouco mais flexível.
+		// Por enquanto somente pegando a ideia geral está bom.
 		fmt.Println("error registering transaction", err)
 		return err
 	}
