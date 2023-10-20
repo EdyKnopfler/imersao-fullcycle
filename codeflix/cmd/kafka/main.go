@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"derso.com/imersao-fullcycle/codepix-go/application/kafka"
+	"derso.com/imersao-fullcycle/codepix-go/infrastructure/db"
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 )
 
@@ -19,10 +21,9 @@ func main() {
 		panic(err)
 	}
 
-	/*
-		Para a mensagem ser entregue este loop precisa ficar rodando e reportar.
-		Se chamamos como goroutine, a publicação de uma única mensagem não acontece pois ela
-		morre junto com a main :()
-	*/
-	kafka.DeliveryReport(deliveryChannel)
+	go kafka.DeliveryReport(deliveryChannel)
+
+	database := db.ConnectDB(os.Getenv("env"))
+	processor := kafka.NewKafkaProcessor(database, producer, deliveryChannel)
+	processor.Consume() // loop (segura também o loop do DeliveryReport)
 }

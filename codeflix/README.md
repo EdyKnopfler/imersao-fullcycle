@@ -100,7 +100,7 @@ type Account struct {
 Subindo a aplicação e o broker Kafka, criando os tópicos e verificando:
 
 ```bash
-  docker compose up [-d] app kafka
+  docker compose up [-d] db app kafka
   docker compose run --rm kafka-topics-generator
   docker compose exec kafka kafka-topics --list --bootstrap-server=localhost:9092
 ```
