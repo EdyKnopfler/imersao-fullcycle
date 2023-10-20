@@ -70,7 +70,7 @@ Subindo o servidor:
 
 ```bash
 docker compose up [-d] app db
-docker compose exec app go run cmd/main.go
+docker compose exec app go run cmd/server/main.go
 ```
 
 Testando com o Evans (já instalado na imagem):
@@ -95,3 +95,32 @@ type Account struct {
 }
 ```
 
+## Kafka
+
+Subindo a aplicação e o broker Kafka, criando os tópicos e verificando:
+
+```bash
+  docker compose up [-d] app kafka
+  docker compose run --rm kafka-topics-generator
+  docker compose exec kafka kafka-topics --list --bootstrap-server=localhost:9092
+```
+
+Também já está configurado o centro de controle da Confluent (http://localhost:9021/):
+
+```bash
+docker compose up [-d] control-center  # ou `run --rm` se quiser ser econômico :)
+```
+
+Para os próximos testes criamos o tópico _teste_; no `docker-compose.yml` há amostras de comandos (também podemos usar o centro de controle para criar o tópico e consumir):
+
+Emitindo mensagem:
+
+```bash
+docker compose exec app go run cmd/kafka/main.go
+```
+
+Consumindo
+
+```bash
+docker compose exec kafka kafka-console-consumer --topic=teste --bootstrap-server=localhost:9092
+```
