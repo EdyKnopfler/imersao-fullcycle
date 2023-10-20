@@ -2,6 +2,8 @@
 
 Todo o gerenciamento do projeto Go é feito dentro do contêiner `app` (ver arquivo `docker-compose.yaml`). A pasta do projeto com os fontes é mapeada em um volume.
 
+*Obs.:** a imersão ensina o uso da ferramenta [cobra](https://github.com/spf13/cobra) para gerenciar múltiplos comandos via flags no mesmo binário; aqui preferi separar em vários binários para tornar o código mais enxuto para consulta.
+
 ## Domain
 
 Coração da aplicação, sem pensar em banco de dados ou infraestrutura de qualquer tipo.
