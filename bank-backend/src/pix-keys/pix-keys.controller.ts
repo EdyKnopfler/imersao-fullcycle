@@ -3,13 +3,16 @@ import { PixKeysService } from './pix-keys.service';
 import { CreatePixKeyDto } from './dto/create-pix-key.dto';
 import { UpdatePixKeyDto } from './dto/update-pix-key.dto';
 
-@Controller('pix-keys')
+@Controller('bank-accounts/:bankAccountId/pix-keys')
 export class PixKeysController {
   constructor(private readonly pixKeysService: PixKeysService) {}
 
   @Post()
-  create(@Body() createPixKeyDto: CreatePixKeyDto) {
-    return this.pixKeysService.create(createPixKeyDto);
+  create(
+    @Param('bankAccountId') bankAccountId: string,
+    @Body() createPixKeyDto: CreatePixKeyDto,
+  ) {
+    return this.pixKeysService.create(bankAccountId, createPixKeyDto);
   }
 
   @Get()

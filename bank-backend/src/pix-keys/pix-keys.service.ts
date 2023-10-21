@@ -12,7 +12,7 @@ export class PixKeysService {
     private pixKeyRepo: Repository<PixKey>,
   ) {}
 
-  create(createPixKeyDto: CreatePixKeyDto) {
+  create(bankAccountId: string, createPixKeyDto: CreatePixKeyDto) {
     return 'This action adds a new pixKey';
   }
 
