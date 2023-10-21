@@ -6,7 +6,8 @@ RUN apt update -y && \
     apt install procps -y && \
     npm install -g @nestjs/cli@10.0.0
 
-WORKDIR /home/node/app  # Usuário node da imagem
+# Usuário node da imagem
+WORKDIR /home/node/app
 
 USER node
 
