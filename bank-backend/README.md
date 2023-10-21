@@ -42,3 +42,8 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## TypeORM
+
+```bash
+npm install typeorm @nestjs/typeorm
+```
