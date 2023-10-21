@@ -13,22 +13,24 @@ export class BankAccountsService {
   ) {}
 
   create(createBankAccountDto: CreateBankAccountDto) {
-    return 'This action adds a new bankAccount';
+    return this.bankAccountRepo.save(createBankAccountDto);
   }
 
   findAll() {
-    return `This action returns all bankAccounts`;
+    return this.bankAccountRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bankAccount`;
+  findOne(id: string) {
+    return this.bankAccountRepo.findOneOrFail({ 
+      where: { id },
+    });
   }
 
-  update(id: number, updateBankAccountDto: UpdateBankAccountDto) {
+  update(id: string, updateBankAccountDto: UpdateBankAccountDto) {
     return `This action updates a #${id} bankAccount`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} bankAccount`;
   }
 }
