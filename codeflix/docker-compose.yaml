@@ -5,6 +5,9 @@ services:
     build: .
     volumes:
       - .:/go/src/
+      # TODO volume mapeando a instalação de pacotes para o lado de fora, 
+      # pois está reinstalando tudo a cada build.
+      # (esse não é só um lembrete de consulta posterior, é para fazer MESMO)
 
   db:
     image: postgres:9.4
