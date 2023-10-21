@@ -3,7 +3,7 @@ FROM node:20-slim
 
 # procps = habilita o reloading
 RUN apt update -y && \
-    apt install procps && \
+    apt install -y procps && \
     npm install -g @nestjs/cli@10.0.0
 
 WORKDIR /home/node/app  # Usuário node da imagem
