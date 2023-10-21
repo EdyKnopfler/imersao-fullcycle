@@ -8,16 +8,16 @@ export class PixKeysController {
   constructor(private readonly pixKeysService: PixKeysService) {}
 
   @Post()
-  create(
+  async create(
     @Param('bankAccountId') bankAccountId: string,
     @Body() createPixKeyDto: CreatePixKeyDto,
   ) {
-    return this.pixKeysService.create(bankAccountId, createPixKeyDto);
+    return await this.pixKeysService.create(bankAccountId, createPixKeyDto);
   }
 
   @Get()
-  findAll() {
-    return this.pixKeysService.findAll();
+  findAll(@Param('bankAccountId') bankAccountId: string) {
+    return this.pixKeysService.findAll(bankAccountId);
   }
 
   @Get(':id')
