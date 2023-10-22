@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"derso.com/imersao-fullcycle/codepix-go/application/dto"
@@ -27,8 +28,8 @@ func NewKafkaProcessor(database *gorm.DB, producer *ckafka.Producer, deliveryCha
 
 func (k *KafkaProcessor) Consume() {
 	configMap := &ckafka.ConfigMap{
-		"bootstrap.servers": "kafka:9092", // TODO externalizar
-		"group.id":          "consumergroup",
+		"bootstrap.servers": os.Getenv("kafkaBootstrapServers"),
+		"group.id":          os.Getenv("kafkaConsumerGroupId"),
 		"auto.offset.reset": "earliest",
 	}
 	consumer, err := ckafka.NewConsumer(configMap)
@@ -36,7 +37,10 @@ func (k *KafkaProcessor) Consume() {
 		panic(err)
 	}
 
-	topics := []string{"teste"}
+	topics := []string{
+		os.Getenv("kafkaTransactionTopic"),
+		os.Getenv("kafkaTransactionConfirmationTopic"),
+	}
 	consumer.SubscribeTopics(topics, nil)
 	fmt.Println("Kafka consumer has been started")
 
@@ -50,15 +54,15 @@ func (k *KafkaProcessor) Consume() {
 }
 
 func (k *KafkaProcessor) processMessage(msg *ckafka.Message) {
-	transactionsTopic := "transactions" // TODO em variável de ambiente
-	transactionConfirmationTopic := "transaction-confirmation"
+	transactionsTopic := os.Getenv("kafkaTransactionTopic")
+	transactionConfirmationTopic := os.Getenv("kafkaTransactionConfirmationTopic")
 
 	switch topic := *msg.TopicPartition.Topic; topic {
 	case transactionsTopic:
 		k.processTransaction(msg)
 	case transactionConfirmationTopic:
 	default:
-		fmt.Println("not a valid topic", topic, "msg:", string(msg.Value))
+		fmt.Println("not a valid topic:", topic, ", msg:", string(msg.Value))
 	}
 }
 
