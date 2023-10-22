@@ -14,12 +14,14 @@ func main() {
 
 	producer := kafka.NewKafkaProducer()
 	deliveryChannel := make(chan ckafka.Event)
-	topic := "teste" // Cria pelo control center ou linha de comando :)
 
-	err := kafka.Publish("Hellô Cáfica", topic, producer, deliveryChannel)
-	if err != nil {
-		panic(err)
-	}
+	/*
+		topic := "teste"
+		err := kafka.Publish("Hellô Cáfica", topic, producer, deliveryChannel)
+		if err != nil {
+			panic(err)
+		}
+	*/
 
 	go kafka.DeliveryReport(deliveryChannel)
 
