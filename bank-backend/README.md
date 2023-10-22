@@ -4,6 +4,8 @@ Simula um banco com suas contas, e dispara transações "Pix" fictícias atravé
 
 Utiliza o framework [NestJS](https://nestjs.com/).
 
+Não estou tratando todos os casos e erros aqui, apenas codando o suficiente para pegar a ideia e a prática (descartando tudo que é repetitivo).
+
 ## Docker
 
 Tudo dentro de contêineres!
