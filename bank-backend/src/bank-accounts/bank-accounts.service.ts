@@ -13,6 +13,7 @@ export class BankAccountsService {
   ) {}
 
   create(createBankAccountDto: CreateBankAccountDto) {
+    // TODO para ficar completo deveria criar no "banco central" codeflix
     return this.bankAccountRepo.save(createBankAccountDto);
   }
 
