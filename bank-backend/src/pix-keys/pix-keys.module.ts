@@ -10,15 +10,17 @@ import { join } from 'path';
 @Module({
   imports: [
     TypeOrmModule.forFeature([PixKey, BankAccount]),
-    ClientsModule.register({
-      name: 'PIX_PACKAGE',
-      transport: Transport.GRPC,
-      options: {
-        url: 'host.docker.internal:50051',
-        package: 'derso.com.imersao.fullcycle.codeflix',
-        protoPath: join(__dirname, 'proto', 'pix.proto'),
-      }
-    }),
+    ClientsModule.register([
+      {
+        name: 'PIX_PACKAGE',
+        transport: Transport.GRPC,
+        options: {
+          url: 'host.docker.internal:50051',
+          package: 'derso.com.imersao.fullcycle.codeflix',
+          protoPath: join(__dirname, 'proto', 'pixkey.proto'),
+        },
+      },
+    ]),
   ],
   controllers: [PixKeysController],
   providers: [PixKeysService],
