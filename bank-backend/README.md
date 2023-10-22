@@ -47,3 +47,13 @@ $ npm run test:cov
 ```bash
 npm install typeorm @nestjs/typeorm
 ```
+
+## gRPC
+
+* Copiamos os `*.proto`
+* Configuramos como assets no `nest-cli.json`
+* Dependências:
+
+```bash
+npm install --save @grpc/proto-loader @grpc/grpc-js @nestjs/microservices
+```
