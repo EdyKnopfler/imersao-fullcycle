@@ -6,6 +6,15 @@ Utiliza o framework [NestJS](https://nestjs.com/).
 
 Não estou tratando todos os casos e erros aqui, apenas codando o suficiente para pegar a ideia e a prática (descartando tudo que é repetitivo).
 
+## Ficou faltando
+
+_Tentar fazer por conta própria depois, consultando o código quando preciso:_
+
+* [ ] Validação das transações
+* [ ] CRUD das transações -- no vídeo ele realiza consistência com transações e lock
+* [ ] Emitir a criação da transação para o Kafka
+* [ ] Recebimento de mensagens do Kafka: confirmação da transação e criação por outro banco
+
 ## Docker
 
 Tudo dentro de contêineres!
