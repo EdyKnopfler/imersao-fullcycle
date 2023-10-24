@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankAccount } from './bank-accounts/entities/bank-account.entity';
 import { PixKeysModule } from './pix-keys/pix-keys.module';
 import { PixKey } from './pix-keys/entities/pix-key.entity';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PixKey } from './pix-keys/entities/pix-key.entity';
     }),
     BankAccountsModule,
     PixKeysModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
