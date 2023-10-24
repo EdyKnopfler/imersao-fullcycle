@@ -7,9 +7,7 @@ services:
       - "50051:50051"
     volumes:
       - .:/go/src/
-      # TODO volume mapeando a instalação de pacotes para o lado de fora, 
-      # pois está reinstalando tudo a cada build.
-      # (esse não é só um lembrete de consulta posterior, é para fazer MESMO)
+      - .gopkg:/go/pkg/mod
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
