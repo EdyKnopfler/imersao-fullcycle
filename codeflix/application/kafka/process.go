@@ -7,6 +7,7 @@ import (
 
 	"derso.com/imersao-fullcycle/codepix-go/application/dto"
 	"derso.com/imersao-fullcycle/codepix-go/application/factory"
+	"derso.com/imersao-fullcycle/codepix-go/application/usecase"
 	"derso.com/imersao-fullcycle/codepix-go/domain/model"
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
 	"gorm.io/gorm"
@@ -61,6 +62,7 @@ func (k *KafkaProcessor) processMessage(msg *ckafka.Message) {
 	case transactionsTopic:
 		k.processTransaction(msg)
 	case transactionConfirmationTopic:
+		k.processTransactionConfirmation(msg)
 	default:
 		fmt.Println("not a valid topic:", topic, ", msg:", string(msg.Value))
 	}
@@ -69,6 +71,7 @@ func (k *KafkaProcessor) processMessage(msg *ckafka.Message) {
 func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
 	transactionDto, err := dto.NewTransactionDTO(msg.Value)
 	if err != nil {
+		fmt.Println("error parsing transaction JSON", err)
 		return err
 	}
 
@@ -102,6 +105,55 @@ func (k *KafkaProcessor) processTransaction(msg *ckafka.Message) error {
 	err = Publish(string(transactionJson), destinationBankTopic, k.Producer, k.DeliveryChannel)
 	if err != nil {
 		fmt.Println("error sending message to destination bank", err)
+		return err
+	}
+
+	return nil
+}
+
+func (k *KafkaProcessor) processTransactionConfirmation(msg *ckafka.Message) error {
+	transactionDto, err := dto.NewTransactionDTO(msg.Value)
+	if err != nil {
+		fmt.Println("error parsing transaction JSON", err)
+		return err
+	}
+
+	transactionUseCase := factory.TransactionUseCaseFactory(k.Database)
+
+	if transactionDto.Status == model.TransactionConfirmed {
+		err = k.confirmTransaction(transactionDto, transactionUseCase)
+		if err != nil {
+			fmt.Println("error when confirming transaction ", err)
+			return err
+		}
+	} else if transactionDto.Status == model.TransactionCompleted {
+		_, err := transactionUseCase.Complete(transactionDto.ID)
+		if err != nil {
+			fmt.Println("error when completing transaction ", err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (k *KafkaProcessor) confirmTransaction(
+	transaction *dto.TransactionDTO,
+	transactionUseCase usecase.TransactionUseCase,
+) error {
+	confirmedTransaction, err := transactionUseCase.Confirm(transaction.ID)
+	if err != nil {
+		return err
+	}
+
+	transactionJson, err := transaction.ToJson()
+	if err != nil {
+		return err
+	}
+
+	topic := "bank" + confirmedTransaction.AccountFrom.Bank.Code
+	err = Publish(string(transactionJson), topic, k.Producer, k.DeliveryChannel)
+	if err != nil {
 		return err
 	}
 

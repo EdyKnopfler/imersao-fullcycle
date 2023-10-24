@@ -9,7 +9,7 @@ import (
 
 type TransactionUseCase struct {
 	TransactionRepository model.TransactionRepositoryInterface
-	PixRepository model.PixKeyRepositoryInterface
+	PixRepository         model.PixKeyRepositoryInterface
 }
 
 func (t *TransactionUseCase) Register(accountId string, amount float64, pixKeyTo string, pixKeyKindTo string, description string) (*model.Transaction, error) {
@@ -32,7 +32,7 @@ func (t *TransactionUseCase) Register(accountId string, amount float64, pixKeyTo
 	if transaction.ID == "" {
 		return nil, errors.New("unable to process this transaction")
 	}
-	
+
 	return transaction, nil
 }
 
@@ -58,4 +58,19 @@ func (t *TransactionUseCase) Confirm(transactionId string) (*model.Transaction, 
 	return transaction, nil
 }
 
-// TODO fluxo para as outras regras de negócio (possivelmente refatoradinho)
+func (t *TransactionUseCase) Complete(transactionId string) (*model.Transaction, error) {
+	transaction, err := t.TransactionRepository.Find(transactionId)
+	if err != nil {
+		log.Println("Transaction not found", transactionId)
+		return nil, err
+	}
+
+	transaction.Status = model.TransactionCompleted
+	err = t.TransactionRepository.Save(transaction)
+	if err != nil {
+		log.Println("Unable to save transaction")
+		return nil, err
+	}
+
+	return transaction, nil
+}
