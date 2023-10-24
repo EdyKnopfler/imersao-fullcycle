@@ -19,7 +19,7 @@ func StartGrpcServer(database *gorm.DB, port int) {
 	// Para debug com o Evans
 	reflection.Register(grpcServer)
 
-	// TODO refatoração das dependências :P
+	// TODO refatoração das dependências :P (ver pasta factory para exemplo)
 	pixRepository := repository.PixKeyRepositoryDb{DB: database}
 	pixUseCase := usecase.PixUseCase{PixKeyRepository: pixRepository}
 	pixGrpcService := NewPixGrpcService(pixUseCase)
